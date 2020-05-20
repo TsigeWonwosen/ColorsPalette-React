@@ -7,7 +7,7 @@ import "./App.css";
 function App() {
   return (
     <div>
-      <Palette palette={seedColors[4]} />
+      <Palette palette={seedColors[1]} />
     </div>
   );
 }

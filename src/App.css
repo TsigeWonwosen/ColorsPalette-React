@@ -9,7 +9,7 @@
   align-items: center;
   text-align: center;
   width: 90vw;
-  height: calc(100vh - 80px);
+  height: 100%;
   margin: auto;
 }
 .Palette-colors {
@@ -83,6 +83,53 @@
   align-items: center;
 }
 
+.copy-overlay {
+  opacity: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s ease-in-out;
+  transform: scale(0.1);
+}
+.copy-overlay.show {
+  opacity: 1;
+  transform: scale(50);
+  z-index: 10;
+  position: absolute;
+}
+.copy-msg {
+  position: fixed;
+  top: 45%;
+  right: 0;
+  left: 0;
+  opacity: 0;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 3rem;
+  transform: scale(0.2);
+  background: rgba(0, 0, 0, 0.1);
+  width: 90vw;
+  margin: auto;
+  border-radius: 0.5rem;
+  color: #fff;
+}
+.copy-msg.show {
+  opacity: 1;
+  z-index: 25;
+  transform: scale(1);
+  transition: all 0.4s ease-in-out;
+  transition-delay: 0.2s;
+}
+.copy-msg p {
+  font-size: 2rem;
+  font-weight: 100;
+}
+
 @media screen and (max-width: 500px) {
   .Palette-colors {
     display: block;
@@ -91,6 +138,6 @@
   }
   .Color-box {
     width: 80vw;
-    height: 20vh;
+    height: 14vh;
   }
 }
