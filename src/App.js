@@ -3,11 +3,12 @@ import Palette from "./Palette";
 import seedColors from "./seedColors";
 
 import "./App.css";
+import "rc-slider/assets/index.css";
 
 function App() {
   return (
     <div>
-      <Palette palette={seedColors[1]} />
+      <Palette palette={seedColors} />
     </div>
   );
 }
