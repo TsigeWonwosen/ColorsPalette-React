@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import Slider from "rc-slider";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import Snackbar from "@material-ui/core/Snackbar";
 
 import ColorBox from "./ColorBox";
+import NavBar from "./NavBar";
 import { generatePalette } from "./colorHelpers";
 
 export default function Palette({ palette }) {
@@ -26,38 +24,17 @@ export default function Palette({ palette }) {
     );
   });
   return (
-    <div className='Palette'>
-      <div className='slider-container'>
-        <div className='slider'>
-          <span>Level : [ {level} ]</span>
-          <Slider
-            defaultValue={level}
-            min={100}
-            max={1000}
-            step={100}
-            onAfterChange={changeLevel}
-          />
-        </div>
-        <div>
-          <h4>
-            {palette.paletteName} {palette.emoji}
-          </h4>
-        </div>
-        <div className='color-select'>
-          <Select
-            labelId='demo-simple-select-label'
-            id='demo-simple-select'
-            value={colorType}
-            onChange={handleChange}
-          >
-            <MenuItem value='rgb'>RGB - rgb(255,255,255) </MenuItem>
-            <MenuItem value='rgba'>RGBA - rgba(255,255,255,0.1)</MenuItem>
-            <MenuItem value='hex'>HEX - #FFFFFF</MenuItem>
-          </Select>
-        </div>
+    <div>
+      <NavBar
+        level={level}
+        colorType={colorType}
+        changeLevel={changeLevel}
+        handleChange={handleChange}
+        {...palette}
+      />
+      <div className='Palette'>
+        <div className='Palette-colors'>{paletteArrers}</div>
       </div>
-
-      <div className='Palette-colors'>{paletteArrers}</div>
     </div>
   );
 }
