@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
-export default function ColorBox({ color: { name, color } }) {
+export default function ColorBox({ name, color }) {
   const [copied, setCopied] = useState(false);
 
   const changeCopyState = () => {
