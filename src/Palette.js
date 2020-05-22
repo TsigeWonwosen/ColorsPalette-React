@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import Button from "@material-ui/core/Button";
-import Snackbar from "@material-ui/core/Snackbar";
+// import Button from "@material-ui/core/Button";
 
 import ColorBox from "./ColorBox";
 import NavBar from "./NavBar";
-import { generatePalette } from "./colorHelpers";
+// import { generatePalette } from "./colorHelpers";
 
 export default function Palette({ palette }) {
   const [level, setLevel] = useState(500);
@@ -14,17 +13,17 @@ export default function Palette({ palette }) {
     setLevel(level);
   };
 
-  const handleChange = (event) => {
-    setColorType(event.target.value);
+  const handleChange = (value) => {
+    setColorType(value);
   };
 
-  let paletteArrers = palette.colors[level].map((color) => {
+  let paletteArrays = palette.colors[level].map((color) => {
     return (
       <ColorBox color={color[colorType]} key={color.id} name={color.name} />
     );
   });
   return (
-    <div>
+    <div className='Palette'>
       <NavBar
         level={level}
         colorType={colorType}
@@ -32,9 +31,11 @@ export default function Palette({ palette }) {
         handleChange={handleChange}
         {...palette}
       />
-      <div className='Palette'>
-        <div className='Palette-colors'>{paletteArrers}</div>
-      </div>
+      <div className='Palette-colors'>{paletteArrays}</div>
+      <footer className='Palette-footer'>
+        {palette.paletteName}
+        <span>{palette.emoji}</span>
+      </footer>
     </div>
   );
 }

@@ -1,14 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,300&display=swap");
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 .Navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 6vh;
+  height: 5vh;
   margin-top: 0.1rem;
 }
 .logo {
   margin: 0 2px;
-  padding: 2px 5px;
+  padding: 1px 5px;
   font-size: 15px;
   background-color: #b1d0e6;
   font-family: "Roboto", sans-serif;
@@ -42,11 +47,11 @@
   justify-content: center;
   align-items: center;
   padding: 0.1rem;
-  border: 0.5px solid #6b7a71;
+  /* border: 0.5px solid #6b7a71; */
 }
 .slider span {
   background: #bde4c9;
-  padding: 0.3rem;
+  padding: 0.1rem;
   width: 10rem;
   margin-right: 0.2rem;
   font-size: 0.9rem;
@@ -69,4 +74,30 @@
   width: 1rem;
   margin-left: -7px;
   margin-top: -5px;
+}
+
+#demo-simple-select {
+  min-width: 15rem;
+  padding: 0.1rem;
+  font-size: 1rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: Roboto, sans-serif, "Segoe UI", Tahoma, Geneva, Verdana,
+    sans-serif;
+  letter-spacing: 0.05rem;
+}
+.Palette-footer {
+  background-color: wheat;
+  height: 4vh;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-weight: bold;
+  padding: 0.4rem;
+}
+.Palette-footer span {
+  margin-right: 2rem;
+  margin-left: 0.4rem;
+  font-size: 2rem;
 }
