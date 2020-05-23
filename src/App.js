@@ -11,15 +11,16 @@ import "rc-slider/assets/index.css";
 const findPalette = (id) => {
   return seedColors.find((color) => color.id === id);
 };
-// console.log(generatePalette(seedColors[4]));
+
 function App() {
   return (
     <div>
       <Switch>
-        <Route exact path='/'>
-          {/* <Palette palette={generatePalette(seedColors[4])} /> */}
-          <SinglePalette />
-        </Route>
+        <Route
+          exact
+          path='/'
+          render={(props) => <SinglePalette {...props} />}
+        />
         <Route
           exact
           path='/palette/:id'

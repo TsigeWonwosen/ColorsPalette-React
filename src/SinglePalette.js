@@ -1,16 +1,27 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { withStyles } from "@material-ui/styles";
+import DeleteForeverRoundedIcon from "@material-ui/icons/DeleteForeverRounded";
 
 import seedColors from "./seedColors";
 
 const styles = {
-  main: {
-    backgroundColor: "rgba(39,56,73,0.1)",
+  root: {
+    backgroundColor: "transparent",
     fontWeight: "700",
+    fontSize: "12px",
+    margin: "0",
     "& span": {
       color: "white",
     },
+  },
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    textAlign: "center",
+    width: "45%",
+    margin: "0 auto",
   },
   palette: {
     display: "flex",
@@ -20,8 +31,8 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "center",
     fontSize: "14px",
-    color: "#f4f4f4",
-    background: "rgba(135,135,206,1.0)",
+    color: "#444",
+    background: "white",
   },
   paletteBody: {
     display: "flex",
@@ -33,28 +44,39 @@ const styles = {
   },
   paletteSingleBox: {
     width: "20%",
-    height: "23%",
+    height: "25%",
   },
 };
 
-function SinglePalette({ classes }) {
+function SinglePalette({ classes, history }) {
+  const handleChange = (id) => {
+    history.push(`/palette/${id}`);
+  };
   const paletteList = seedColors.map((palette) => (
-    <Link to={`/palette/${palette.id}`}>
-      <div key={palette.id} className='paletteList'>
-        <div className={classes.palette}>
-          <span className={classes.main}>{palette.paletteName}</span>
-          <span>{palette.emoji}</span>
-        </div>
-        <div className={classes.paletteBody}>
-          {palette.colors.map((color) => (
-            <div
-              style={{ background: `${color.color}` }}
-              className={classes.paletteSingleBox}
-            ></div>
-          ))}
-        </div>
+    // <Link to={`/palette/${palette.id}`}>
+    <div
+      key={palette.id}
+      className='paletteList'
+      onClick={() => handleChange(palette.id)}
+    >
+      <div className={classes.paletteBody}>
+        {palette.colors.map((color) => (
+          <div
+            style={{ background: `${color.color}` }}
+            className={classes.paletteSingleBox}
+          ></div>
+        ))}
       </div>
-    </Link>
+      <div className={classes.palette}>
+        <span className={classes.root}>{palette.paletteName}</span>
+        <span>{palette.emoji}</span>
+      </div>
+      <button className='closeButton'>
+        {" "}
+        <DeleteForeverRoundedIcon />{" "}
+      </button>
+    </div>
+    // </Link>
   ));
 
   // const id = props.match.params.id;
@@ -69,8 +91,9 @@ function SinglePalette({ classes }) {
   // const { classes } = props;
   return (
     <div className='Palette-mini'>
-      <div>
-        <h3>React Colors</h3>
+      <div className={classes.header}>
+        <h4>React Colors</h4>
+        <span>Colors Picker</span>
       </div>
       <div className='Palette-list'>{paletteList}</div>
     </div>
