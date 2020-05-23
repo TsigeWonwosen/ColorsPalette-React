@@ -17,14 +17,15 @@ function App() {
     <div>
       <Switch>
         <Route exact path='/'>
-          <Palette palette={generatePalette(seedColors[4])} />
+          {/* <Palette palette={generatePalette(seedColors[4])} /> */}
+          <SinglePalette />
         </Route>
         <Route
           exact
           path='/palette/:id'
           render={(routProps) => (
-            <SinglePalette
-              singlePalette={findPalette(routProps.match.params.id)}
+            <Palette
+              palette={generatePalette(findPalette(routProps.match.params.id))}
               {...routProps}
             />
           )}
