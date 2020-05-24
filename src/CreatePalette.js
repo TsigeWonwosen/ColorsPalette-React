@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+
+import { Link } from "react-router-dom";
 
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -19,7 +21,12 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import Button from "@material-ui/core/Button";
+
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { SketchPicker } from "react-color";
+
+import DraggableColorBox from "./DraggableColorBox";
+
 const drawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
@@ -87,13 +94,34 @@ export default function CreatePalette(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [background, setBackground] = React.useState("#417505");
+  const [colorName, setName] = React.useState("");
+  const [newColor, setColor] = React.useState("#333");
   const [colors, setColors] = React.useState([
-    "#417505",
-    "#f4f4ee",
-    "red",
-    "blue",
+    {
+      name: "rgb-blue",
+      color: "#417505",
+    },
+    {
+      name: "Hex-red",
+      color: "#B8E986",
+    },
+    {
+      name: "rgba - orange",
+      color: "#f4f4ee",
+    },
   ]);
+
+  useEffect(() => {
+    ValidatorForm.addValidationRule("isColorName", (value) => {
+      return colors.every(
+        ({ name }) => name.toLowerCase() !== value.toLowerCase()
+      );
+    });
+
+    ValidatorForm.addValidationRule("isColor", (value) => {
+      return colors.every(({ color }) => color !== newColor);
+    });
+  }, [colorName]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -104,12 +132,25 @@ export default function CreatePalette(props) {
   };
 
   const handleChangeComplete = (color) => {
-    setBackground(color.hex);
+    setColor(color.hex);
+  };
+  const handleChange = (evt) => {
+    console.log(colorName);
+    setName(evt.target.value);
   };
   const addColors = () => {
-    setColors((prvSt) => [background, ...prvSt]);
+    let newColorPick = {};
+    newColorPick.name = colorName;
+    newColorPick.color = newColor;
+    setColors((prvSt) => [newColorPick, ...prvSt]);
+    setName("");
   };
-  console.log(background);
+  function deleteColor(name) {
+    // let newColors = colors.filter((color) => color.id !== id);
+    colors.splice(name, 1);
+    setColors(colors);
+  }
+
   return (
     <div>
       <button onClick={() => props.history.push("/")}> Back</button>
@@ -135,6 +176,7 @@ export default function CreatePalette(props) {
             </IconButton>
             <Typography variant='h5' noWrap>
               Create Palette
+              <Link to='/'>Back to Home</Link>
             </Typography>
           </Toolbar>
         </AppBar>
@@ -177,19 +219,39 @@ export default function CreatePalette(props) {
             </ListItem>
             <ListItem>
               <SketchPicker
-                color={background}
+                color={newColor}
                 onChangeComplete={handleChangeComplete}
               />
             </ListItem>
-            <Button
-              className={classes.button}
-              variant='contained'
-              color='secondary'
-              style={{ background }}
-              onClick={addColors}
+            <ValidatorForm
+              useRef='form'
+              onSubmit={addColors}
+              onError={(errors) => console.log(errors)}
             >
-              ADD COLOR
-            </Button>
+              <TextValidator
+                label='New Color'
+                onChange={handleChange}
+                name='colorName'
+                value={colorName}
+                validators={["required", "isColorName", "isColor"]}
+                errorMessages={[
+                  "this field is required",
+                  "Color Name is not valid",
+                  "Color is already Taken",
+                ]}
+              />
+
+              <Button
+                className={classes.button}
+                variant='contained'
+                type='submit'
+                style={{ background: newColor }}
+              >
+                {" "}
+                ADD COLOR
+              </Button>
+            </ValidatorForm>
+
             <Divider />
             {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
               <ListItem button key={text}>
@@ -220,11 +282,25 @@ export default function CreatePalette(props) {
           <div className={classes.drawerHeader} />
 
           <Typography paragraph>
-            {colors.map((color) => (
-              <li key={color} style={{ backgroundColor: color }}>
-                {color}
-              </li>
-            ))}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                alignContent: "center",
+              }}
+            >
+              {colors.map((color) => (
+                <DraggableColorBox
+                  color={color.color}
+                  key={color.name}
+                  name={color.name}
+                  deleteColor={deleteColor}
+                  id={color.name}
+                />
+              ))}
+            </div>
           </Typography>
         </main>
       </div>

@@ -153,8 +153,8 @@ a {
 }
 .Palette-list {
   flex: 10;
-  /* height: 50%;
-  width: 40%; */
+  height: calc(80% - 30px);
+  /*width: 40%; */
   text-align: center;
   margin: auto auto;
   display: grid;
