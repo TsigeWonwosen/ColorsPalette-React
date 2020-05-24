@@ -20,8 +20,9 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "center",
     textAlign: "center",
-    width: "45%",
+    width: "40%",
     margin: "0 auto",
+    flex: "1",
   },
   palette: {
     display: "flex",
@@ -53,7 +54,6 @@ function SinglePalette({ classes, history }) {
     history.push(`/palette/${id}`);
   };
   const paletteList = seedColors.map((palette) => (
-    // <Link to={`/palette/${palette.id}`}>
     <div
       key={palette.id}
       className='paletteList'
@@ -76,24 +76,15 @@ function SinglePalette({ classes, history }) {
         <DeleteForeverRoundedIcon />{" "}
       </button>
     </div>
-    // </Link>
   ));
 
-  // const id = props.match.params.id;
-  // if (/\d/.test(id)) {
-  //   console.log("Redirect to Home ... Peace.", props);
-  //   return <Redirect to='/' />;
-  // }
-  // //   console.log("Id  :" + id);
-  // let renderPalette = singlePalette.colors.map((color) => {
-  //   return <ColorBox color={color} key={color.name} />;
-  // });
-  // const { classes } = props;
   return (
     <div className='Palette-mini'>
       <div className={classes.header}>
         <h4>React Colors</h4>
-        <span>Colors Picker</span>
+        <span>
+          <Link to='/create-palette'>Create Palette</Link>
+        </span>
       </div>
       <div className='Palette-list'>{paletteList}</div>
     </div>
@@ -101,3 +92,14 @@ function SinglePalette({ classes, history }) {
 }
 
 export default withStyles(styles)(SinglePalette);
+
+// const id = props.match.params.id;
+// if (/\d/.test(id)) {
+//   console.log("Redirect to Home ... Peace.", props);
+//   return <Redirect to='/' />;
+// }
+// //   console.log("Id  :" + id);
+// let renderPalette = singlePalette.colors.map((color) => {
+//   return <ColorBox color={color} key={color.name} />;
+// });
+// const { classes } = props;

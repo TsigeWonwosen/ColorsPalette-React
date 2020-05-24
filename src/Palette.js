@@ -19,7 +19,13 @@ export default function Palette({ palette }) {
 
   let paletteArrays = palette.colors[level].map((color) => {
     return (
-      <ColorBox color={color[colorType]} key={color.id} name={color.name} />
+      <ColorBox
+        color={color[colorType]}
+        key={color.id}
+        name={color.name}
+        id={color.id}
+        paletteId={palette.id}
+      />
     );
   });
   return (
