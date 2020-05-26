@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
 
 import SinglePalette from "./SinglePalette";
@@ -10,18 +10,44 @@ import { generatePalette } from "./colorHelpers";
 
 import "./App.css";
 import "rc-slider/assets/index.css";
-const findPalette = (id) => {
-  return seedColors.find((color) => color.id === id);
-};
 
 function App() {
+  const savePalettes = JSON.parse(window.localStorage.getItem("palettes"));
+  const [paletteColors, setPaletteColor] = useState(savePalettes || seedColors);
+
+  const findPalette = (id) => {
+    return paletteColors.find((color) => color.id === id);
+  };
+
+  const addNewPalette = (newPalette) => {
+    setPaletteColor((prevState) => [newPalette, ...prevState]);
+  };
+
+  useEffect(() => {
+    function syncLocalStorage() {
+      window.localStorage.setItem("palettes", JSON.stringify(paletteColors));
+    }
+    syncLocalStorage();
+  }, [paletteColors]);
+
+  function deletePalette(id) {
+    let newColors = paletteColors.filter((color) => color.id !== id);
+    console.log(paletteColors.filter((color) => color.id === id));
+    setPaletteColor(newColors);
+  }
   return (
     <div>
       <Switch>
         <Route
           exact
           path='/'
-          render={(props) => <SinglePalette {...props} />}
+          render={(props) => (
+            <SinglePalette
+              {...props}
+              paletteColors={paletteColors}
+              deletePalette={deletePalette}
+            />
+          )}
         />
         <Route
           exact
@@ -38,7 +64,7 @@ function App() {
           path='/palette/:id/:colorId'
           render={(routProps) => (
             <SingleColorPalette
-              palette={seedColors}
+              palette={paletteColors}
               // palette={generatePalette(findPalette(routProps.match.params.id))}
               {...routProps}
             />
@@ -47,7 +73,13 @@ function App() {
         <Route
           exact
           path='/create-palette/'
-          render={(routProps) => <CreatePalette {...routProps} />}
+          render={(routProps) => (
+            <CreatePalette
+              {...routProps}
+              paletteColors={paletteColors}
+              addNewPalette={addNewPalette}
+            />
+          )}
         />
         <Route
           render={(props) => (

@@ -25,7 +25,7 @@ function ColorBox({ name, color, id, paletteId, classes }) {
     setTimeout(() => setCopied(false), 1500);
   }, [copied]);
 
-  const isDarkColor = chroma(color).luminance() <= 0.09;
+  // const isDarkColor = chroma(color).luminance() <= 0.09;
   const isLightColor = chroma(color).luminance() >= 0.2;
 
   return (

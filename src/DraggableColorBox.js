@@ -1,6 +1,6 @@
 import React from "react";
 import { withStyles } from "@material-ui/styles";
-
+import { SortableElement } from "react-sortable-hoc";
 const styles = {
   DraggableBox: {
     backgroundColor: (props) => props.color,
@@ -28,14 +28,16 @@ const styles = {
   },
 };
 
-function DraggableColorBox({ color, name, classes, deleteColor, id }) {
-  return (
-    <div className={classes.DraggableBox}>
-      {name}
-      <button className={classes.btnDelete} onClick={() => deleteColor(id)}>
-        X
-      </button>
-    </div>
-  );
-}
+const DraggableColorBox = SortableElement(
+  ({ color, name, classes, deleteColor, id }) => {
+    return (
+      <div className={classes.DraggableBox}>
+        {name}
+        <button className={classes.btnDelete} onClick={() => deleteColor(id)}>
+          X
+        </button>
+      </div>
+    );
+  }
+);
 export default withStyles(styles)(DraggableColorBox);

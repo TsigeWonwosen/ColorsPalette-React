@@ -137,68 +137,6 @@ a {
   font-weight: 100;
 }
 
-.Palette-mini {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 100vh;
-  width: 100%;
-  color: #ccc;
-  font-size: 20px;
-  font-family: "Montserrat";
-  background: linear-gradient(rgba(236, 135, 135, 0.5), transparent);
-  background-color: rgb(34, 67, 156);
-}
-.Palette-list {
-  flex: 10;
-  height: calc(80% - 30px);
-  /*width: 40%; */
-  text-align: center;
-  margin: auto auto;
-  display: grid;
-  grid-template-columns: repeat(3, 30%);
-  grid-gap: 5%;
-}
-
-.Palette-list:hover {
-  cursor: pointer;
-}
-
-.paletteList {
-  width: 170px;
-  height: 150px;
-  border: 1px solid rgb(165, 167, 231);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  /* border-radius: 0.2rem; */
-  margin-bottom: 0.3rem;
-  overflow: hidden;
-  background-color: rgb(219, 236, 217);
-  padding: 5px;
-  position: relative;
-  border-radius: 5px;
-  overflow: hidden;
-}
-.closeButton {
-  position: absolute;
-  top: 1px;
-  right: 1px;
-  opacity: 0;
-  padding: 1px 1px;
-  color: rgb(238, 228, 228);
-  border-radius: 2px;
-  background: rgb(207, 12, 12);
-  border: none;
-  font-size: small;
-}
-.paletteList:hover .closeButton {
-  opacity: 1;
-}
 @media screen and (max-width: 500px) {
   .Palette-colors {
     height: 100vh;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -21,11 +21,14 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import { arrayMove } from "react-sortable-hoc";
+import ArrowBackIosSharpIcon from "@material-ui/icons/ArrowBackIosSharp";
 
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { SketchPicker } from "react-color";
 
-import DraggableColorBox from "./DraggableColorBox";
+import DraggableColorList from "./DraggableColorList";
 
 const drawerWidth = 350;
 
@@ -95,21 +98,9 @@ export default function CreatePalette(props) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [colorName, setName] = React.useState("");
-  const [newColor, setColor] = React.useState("#333");
-  const [colors, setColors] = React.useState([
-    {
-      name: "rgb-blue",
-      color: "#417505",
-    },
-    {
-      name: "Hex-red",
-      color: "#B8E986",
-    },
-    {
-      name: "rgba - orange",
-      color: "#f4f4ee",
-    },
-  ]);
+  const [newColor, setColor] = React.useState("#fefefe");
+  const [colors, setColors] = React.useState(props.paletteColors[0].colors);
+  const [paletteName, setPaletteName] = React.useState("");
 
   useEffect(() => {
     ValidatorForm.addValidationRule("isColorName", (value) => {
@@ -121,7 +112,7 @@ export default function CreatePalette(props) {
     ValidatorForm.addValidationRule("isColor", (value) => {
       return colors.every(({ color }) => color !== newColor);
     });
-  }, [colorName]);
+  }, [colorName, colors, newColor]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -135,7 +126,6 @@ export default function CreatePalette(props) {
     setColor(color.hex);
   };
   const handleChange = (evt) => {
-    console.log(colorName);
     setName(evt.target.value);
   };
   const addColors = () => {
@@ -146,9 +136,45 @@ export default function CreatePalette(props) {
     setName("");
   };
   function deleteColor(name) {
-    // let newColors = colors.filter((color) => color.id !== id);
-    colors.splice(name, 1);
-    setColors(colors);
+    setColors(colors.filter((color) => color.name !== name));
+  }
+  const onSortEnd = ({ oldIndex, newIndex }) => {
+    // setColors(({ colors }) => ({
+    //   colors: arrayMove(colors, oldIndex, newIndex),
+    // }));
+
+    setColors(arrayMove(colors, oldIndex, newIndex));
+  };
+  const handlePalette = (e) => {
+    setPaletteName(e.target.value);
+  };
+  const handlePaletteSubmit = () => {
+    let NewPalette = {
+      paletteName,
+      id: paletteName.toLocaleLowerCase().replace(/ /g, "-"),
+      emoji: "(*Emoji*)",
+      colors: colors,
+    };
+    props.addNewPalette(NewPalette);
+    props.history.push("/");
+  };
+  const clearPalette = () => {
+    setColors([]);
+  };
+
+  function addRandomColor() {
+    const allColors = props.paletteColors.map((p) => p.colors).flat();
+    let rand;
+    let randomColor;
+    let isDuplicateColor = true;
+    while (isDuplicateColor) {
+      rand = Math.floor(Math.random() * allColors.length);
+      randomColor = allColors[rand];
+      isDuplicateColor = colors.some(
+        (color) => color.name === randomColor.name
+      );
+    }
+    setColors((prvState) => [...prvState, randomColor]);
   }
 
   return (
@@ -174,9 +200,38 @@ export default function CreatePalette(props) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant='h5' noWrap>
-              Create Palette
-              <Link to='/'>Back to Home</Link>
+
+            <Typography
+              variant='h5'
+              noWrap
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+                textAlign: "center",
+              }}
+            >
+              <span>Create Palette</span>
+              <Link to='/'>
+                {" "}
+                <ArrowBackIosSharpIcon /> Back{" "}
+              </Link>
+              <form className={classes.root} noValidate autoComplete='off'>
+                <TextField
+                  id='paletteName'
+                  label='Palette Name'
+                  name='paletteName'
+                  onChange={handlePalette}
+                  variant='filled'
+                />
+              </form>
+              <Button
+                variant='contained'
+                color='primary'
+                onClick={handlePaletteSubmit}
+              >
+                Create New Palette
+              </Button>
             </Typography>
           </Toolbar>
         </AppBar>
@@ -206,6 +261,7 @@ export default function CreatePalette(props) {
                 className={classes.button}
                 variant='contained'
                 color='primary'
+                onClick={clearPalette}
               >
                 Clear Palette
               </Button>
@@ -213,6 +269,7 @@ export default function CreatePalette(props) {
                 className={classes.button}
                 variant='contained'
                 color='secondary'
+                onClick={addRandomColor}
               >
                 Random Color
               </Button>
@@ -282,25 +339,12 @@ export default function CreatePalette(props) {
           <div className={classes.drawerHeader} />
 
           <Typography paragraph>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                alignContent: "center",
-              }}
-            >
-              {colors.map((color) => (
-                <DraggableColorBox
-                  color={color.color}
-                  key={color.name}
-                  name={color.name}
-                  deleteColor={deleteColor}
-                  id={color.name}
-                />
-              ))}
-            </div>
+            <DraggableColorList
+              colors={colors}
+              deleteColor={deleteColor}
+              axis='xy'
+              onSortEnd={onSortEnd}
+            />
           </Typography>
         </main>
       </div>
